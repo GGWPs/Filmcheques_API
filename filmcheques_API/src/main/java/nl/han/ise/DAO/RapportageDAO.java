@@ -27,6 +27,7 @@ public class RapportageDAO {
 
     //Haalt een lijst op met rapportages en voegt/wijzigd ze toe aan REDIS
     public void addAndUpdateAllRapportages(){
+        jedis.flushAll();
         List<String> lijstRapportages = lijstRapportages();
         for(int i = 0; i <= lijstRapportages.size()-1; i++){
             addOrUpdateRapportage(lijstRapportages.get(i));

@@ -71,6 +71,22 @@ public class RapportageControllerTest {
         assertEquals(null, rapportageResponse.getEntity());
     }
 
+    @Test
+    public void testUpdateAndGetAllRapportages(){
+        //SETUP
+        RapportageLijst rapportageLijst = new RapportageLijst();
+        List<String> rapportage = new ArrayList<>();
+        rapportage.add("Rapportage");
+        rapportageLijst.setRapportageLijst(rapportage);
+        lenient().when(rapportageService.retrieveLijst()).thenReturn(rapportageLijst);
+
+        //TEST
+        Response rapportageResponse = sut.getAllRapportage();
+
+        //VERIFY
+        assertEquals(Response.Status.OK.getStatusCode(), rapportageResponse.getStatus());
+        assertEquals(rapportageLijst, rapportageResponse.getEntity());
+    }
 
 
 
