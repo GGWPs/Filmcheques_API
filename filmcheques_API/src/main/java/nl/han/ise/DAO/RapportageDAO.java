@@ -3,11 +3,14 @@ package nl.han.ise.DAO;
 import nl.han.ise.ConnectionFactory;
 import redis.clients.jedis.Jedis;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class RapportageDAO {
 
@@ -18,6 +21,7 @@ public class RapportageDAO {
     public RapportageDAO(){
         connectionFactory = new ConnectionFactory();
         jedis = new Jedis(connectionFactory.getRedisHost());
+        setupLogger();
     }
 
     //Vraagt de opgevraagde rapportage op via REDIS
@@ -64,5 +68,19 @@ public class RapportageDAO {
         }
     }
 
+
+    public void setupLogger(){
+        try {
+            FileHandler fhandler = new FileHandler("Logfile.txt");
+            SimpleFormatter sformatter = new SimpleFormatter();
+            fhandler.setFormatter(sformatter);
+            logger.addHandler(fhandler);
+
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+        } catch (SecurityException ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+    }
+    }
 
 }
