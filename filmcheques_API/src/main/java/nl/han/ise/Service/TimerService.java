@@ -8,11 +8,11 @@ import javax.inject.Inject;
 public class TimerService {
 
     @Inject
-    RapportageService rapportageService;
+    private RapportageService rapportageService;
 
-
-    @Schedule(second="*/10", minute="*",hour="*", persistent=false)
-    public void doWork(){
+    //Tijd waarop de rapportages worden geupdated.
+    @Schedule(second="*/00", minute="*/00",hour="*/08", persistent=false)
+    public void startUpdateRapportage(){
         rapportageService.updateRapportages();
     }
 }

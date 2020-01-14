@@ -5,8 +5,11 @@ import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,22 +23,28 @@ public class RapportageDAO {
 
     public RapportageDAO(){
         connectionFactory = new ConnectionFactory();
-        jedis = new Jedis(connectionFactory.getRedisHost());
+        if (jedis == null) {
+            jedis = new Jedis(connectionFactory.getRedisHost());
+        }
         setupLogger();
     }
 
     //Vraagt de opgevraagde rapportage op via REDIS
     public String getRapportage(String rapportage){
-        return jedis.get(rapportage);
+        String rapportageJson = jedis.get(rapportage);
+        jedis.close();
+        return rapportageJson;
     }
 
-    //Haalt een lijst op met rapportages en voegt/wijzigd ze toe aan REDIS
+    //Leegt de Redis database en vult hem opnieuw in vanuit de SQL database.
     public void addAndUpdateAllRapportages(){
+        logger.log(Level.INFO, "redis geupdated op " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()));
         jedis.flushAll();
-        List<String> lijstRapportages = lijstRapportages();
+        List<String> lijstRapportages = lijstRapportagesSql();
         for(int i = 0; i <= lijstRapportages.size()-1; i++){
             addOrUpdateRapportage(lijstRapportages.get(i));
         }
+        jedis.close();
     }
 
     //Functie om een rapportage toe te voegen of te wijzigen
@@ -52,8 +61,19 @@ public class RapportageDAO {
         }
     }
 
+    //Functie om een lijst van rapportages op te halen van Jedis.
+    public List<String> lijstRapportagesRedis(){
+        List<String> rapportageLijst = new ArrayList<>();
+        Set<String> keys = jedis.keys("RAPPORTAGE_*");
+        for (String key : keys) {
+            rapportageLijst.add(key);
+        }
+        jedis.close();
+        return rapportageLijst;
+    }
+
     //Functie om een lijst van rapportages op te halen van SQL.
-    public List<String> lijstRapportages() {
+    public List<String> lijstRapportagesSql() {
         List<String> rapportageLijst = new ArrayList<>();
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT name FROM sys.views WHERE name LIKE 'RAPPORTAGE_%'")) {
@@ -69,18 +89,20 @@ public class RapportageDAO {
     }
 
 
+    //Functie dat alle logs geschreven worden na een bestand genaamd Logfile
     public void setupLogger(){
         try {
-            FileHandler fhandler = new FileHandler("Logfile.txt");
+            FileHandler fhandler = new FileHandler("Logfile.txt", true);
             SimpleFormatter sformatter = new SimpleFormatter();
             fhandler.setFormatter(sformatter);
             logger.addHandler(fhandler);
-
         } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         } catch (SecurityException ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
     }
     }
+
+
 
 }

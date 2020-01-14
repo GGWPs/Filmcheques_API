@@ -41,7 +41,7 @@ public class RapportageServiceTest {
         //SETUP
         RapportageLijst rapportageLijst = new RapportageLijst();
         rapportageLijst.getRapportageLijst().add("Rapportage");
-        when(rapportageDAO.lijstRapportages()).thenReturn(rapportageLijst.getRapportageLijst());
+        when(rapportageDAO.lijstRapportagesRedis()).thenReturn(rapportageLijst.getRapportageLijst());
 
         //TEST
         RapportageLijst rapportageLijst2 = sut.retrieveLijst();

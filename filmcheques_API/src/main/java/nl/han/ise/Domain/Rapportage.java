@@ -2,7 +2,6 @@ package nl.han.ise.Domain;
 
 public class Rapportage {
 
-
     public String getRapportage() {
         return rapportage;
     }
@@ -12,7 +11,4 @@ public class Rapportage {
     }
 
     public String rapportage;
-
-
-
 }

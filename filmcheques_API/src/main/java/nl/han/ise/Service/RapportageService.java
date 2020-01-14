@@ -3,7 +3,6 @@ package nl.han.ise.Service;
 import nl.han.ise.DAO.RapportageDAO;
 import nl.han.ise.Domain.Rapportage;
 import nl.han.ise.Domain.RapportageLijst;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
 
@@ -14,7 +13,7 @@ public class RapportageService {
 
     public RapportageLijst retrieveLijst(){
         RapportageLijst rapportageLijst = new RapportageLijst();
-        rapportageLijst.setRapportageLijst(rapportageDAO.lijstRapportages());
+        rapportageLijst.setRapportageLijst(rapportageDAO.lijstRapportagesRedis());
         return rapportageLijst;
     }
 
@@ -27,7 +26,7 @@ public class RapportageService {
     public RapportageLijst updateRapportages(){
         rapportageDAO.addAndUpdateAllRapportages();
         RapportageLijst rapportageLijst = new RapportageLijst();
-        rapportageLijst.setRapportageLijst(rapportageDAO.lijstRapportages());
+        rapportageLijst.setRapportageLijst(rapportageDAO.lijstRapportagesRedis());
         return rapportageLijst;
     }
 }
