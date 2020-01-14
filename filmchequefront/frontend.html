@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<script src="scripts.js">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+</script>
+<head>
+    <title>BiosFijn Rapportages</title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body onload="getRapportages(document.getElementById('output').value)">
+
+<h1>BiosFijn Rapportage Lijst</h1>
+<form action="javascript:getRapportage(document.getElementById('output').value)" >
+    <p>Kies uw rapportage</p>
+    <select id="rapportages">
+    </select>
+    <p><input type="submit" value="Open rapportage"></p>
+</form>
+<p> URL van de API:</p>
+<input type="text" id="output" value = "">
+<script>
+    document.getElementById('output').value = apiURL;
+</script>
+
+<button onclick = "updateRapportages(document.getElementById('output').value)">
+    Update rapportages
+</button>
+
+<div id="response"></div>
+
+</body>
+</html>

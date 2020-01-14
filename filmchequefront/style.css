@@ -1,0 +1,65 @@
+#root {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    margin: 1rem;
+    border: 1px solid gray;
+}
+
+@media screen and (min-width: 600px) {
+    .card {
+        flex: 1 1 calc(50% - 2rem);
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .card {
+        flex: 1 1 calc(33% - 2rem);
+    }
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #929292;
+    margin:8px;
+    box-shadow: 0 0 8px #ababab;
+}
+
+th, td {
+    padding: 5px;
+    border: 1px solid #929292;
+    text-align: left;
+    vertical-align: top;
+    background:#fff;
+    font-weight:normal;
+}
+
+th{
+    background:#a9a9a9;
+    color:white;
+}
+th:nth-child(1){
+    text-align: right;
+}
+
+td:nth-child(1){
+    font-weight: bold;
+    background: #f6f6f6;
+    text-align: right;
+
+}
+td:nth-child(2){
+    font-style: italic;
+    text-align: left;
+}
+
+tr table thead tr th{
+    font-size:12px;
+}
